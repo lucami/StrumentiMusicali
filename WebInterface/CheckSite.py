@@ -4,12 +4,13 @@ from requests_html import HTMLSession
 from bs4 import BeautifulSoup
 from DBInterface.DataBaseInterface import DBInterface
 
+debug = False
 
 class Strumento:
     def __init__(self, link, prezzo, nome):
         self.link = link
         self.prezzo = prezzo
-        self.nome = nome 
+        self.nome = nome
         # print(f"{self.nome}, {self.prezzo}, {self.link}")
 
     def __repr__(self):
@@ -52,10 +53,11 @@ class SiteInterface:
             soup_tag = BeautifulSoup(str(tags), "lxml")
             tag_nome = soup_tag.find_all('a', {"style": "text-transform: uppercase;"})
             tag_prezzo = soup_tag.find_all('span', {"class": "prz"})
-            # print(tag_nome[0].text)
-            # print(tag_nome[0]['href'])
-            # print("++++++++++++++++++++++")
-            # print(float(tag_prezzo[0].text.split()[1].replace(".","").replace(",",".")))
+            if debug:
+                print(tag_nome[0].text)
+                print(tag_nome[0]['href'])
+                print("++++++++++++++++++++++")
+                print(float(tag_prezzo[0].text.split()[1].replace(".","").replace(",",".")))
 
             s = Strumento("https://www.mercatinomusicale.com/" + tag_nome[0]['href'],
                           float(tag_prezzo[0].text.split()[1].replace(".", "").replace(",", ".")),
