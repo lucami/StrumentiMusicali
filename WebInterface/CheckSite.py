@@ -9,7 +9,7 @@ class Strumento:
     def __init__(self, link, prezzo, nome):
         self.link = link
         self.prezzo = prezzo
-        self.nome = nome
+        self.nome = nome 
         # print(f"{self.nome}, {self.prezzo}, {self.link}")
 
     def __repr__(self):
