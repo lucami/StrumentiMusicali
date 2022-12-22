@@ -1,0 +1,6 @@
+email:
+    lucaminotti1988@gmail.com
+    suca@gmail.com
+ricerca:
+    occasione_chitarra: https://www.mercatinomusicale.com/ann/search.asp?kw=occasione&rp=2&ct=&ch=&mc=&gp=&st=&p1=&p2=&rg=&pv=&vt=&pc=&sg=&pn=&ob=data
+    occasione_basso: https://www.mercatinomusicale.com/ann/search.asp?kw=occasione&rp=3&ct=&ch=&mc=&gp=&st=&p1=&p2=&rg=&pv=&vt=&pc=&sg=&pn=&ob=data

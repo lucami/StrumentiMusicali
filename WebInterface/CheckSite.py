@@ -41,28 +41,65 @@ class SiteInterface:
         for l in self.links:
             self.parse_link(l)
 
+    def parse_pri_pro_tags(self, tag_strumenti):
+        i = 0
+        for tags in tag_strumenti:
+            try:
+                soup_tag = BeautifulSoup(str(tags), "lxml")
+                tag_nome = soup_tag.find_all('a', {"style": "text-transform: uppercase;"})
+                tag_prezzo = soup_tag.find_all('span', {"class": "prz"})
+                if debug:
+                    i+=1
+                    print("****************************")
+                    #print(tags)
+                    print(f"{i} {tag_nome[0].text}")
+                    #print(tag_nome[0]['href'])
+                    #print("++++++++++++++++++++++")
+                    #print(float(tag_prezzo[0].text.split()[1].replace(".","").replace(",",".")))
+                    pass
+                s = Strumento("https://www.mercatinomusicale.com/" + tag_nome[0]['href'],
+                              float(tag_prezzo[0].text.split()[1].replace(".", "").replace(",", ".")),
+                              tag_nome[0].text)
+                self.strumenti.append(s)
+            except:
+                print("Error in parse link")
+
+
     def parse_link(self, l):
+        i=0
         session = HTMLSession()
         resp = session.get(l)
         resp.html.render()
         soup = BeautifulSoup(resp.html.html, "lxml")
-        tag_strumenti = soup.find_all('div', {"class": "item pri"})
-        for tags in tag_strumenti:
-            # print("****************************")
-            # print(tags)
-            soup_tag = BeautifulSoup(str(tags), "lxml")
-            tag_nome = soup_tag.find_all('a', {"style": "text-transform: uppercase;"})
-            tag_prezzo = soup_tag.find_all('span', {"class": "prz"})
-            if debug:
-                print(tag_nome[0].text)
-                print(tag_nome[0]['href'])
-                print("++++++++++++++++++++++")
-                print(float(tag_prezzo[0].text.split()[1].replace(".","").replace(",",".")))
 
-            s = Strumento("https://www.mercatinomusicale.com/" + tag_nome[0]['href'],
-                          float(tag_prezzo[0].text.split()[1].replace(".", "").replace(",", ".")),
-                          tag_nome[0].text)
-            self.strumenti.append(s)
+        tag_strumenti = soup.find_all('div', {"class": "item pri"})
+        self.parse_pri_pro_tags( tag_strumenti)
+        tag_strumenti = soup.find_all('div', {"class": "item pro"})
+        self.parse_pri_pro_tags(tag_strumenti)
+        '''
+        tag_strumenti = soup.find_all('div', {"class": "item pri"})
+        
+        for tags in tag_strumenti:
+                    try:
+                        soup_tag = BeautifulSoup(str(tags), "lxml")
+                        tag_nome = soup_tag.find_all('a', {"style": "text-transform: uppercase;"})
+                        tag_prezzo = soup_tag.find_all('span', {"class": "prz"})
+                        if debug:
+                            i+=1
+                            print("****************************")
+                            #print(tags)
+                            print(f"{i} {tag_nome[0].text}")
+                            #print(tag_nome[0]['href'])
+                            #print("++++++++++++++++++++++")
+                            #print(float(tag_prezzo[0].text.split()[1].replace(".","").replace(",",".")))
+                            pass
+                        s = Strumento("https://www.mercatinomusicale.com/" + tag_nome[0]['href'],
+                                      float(tag_prezzo[0].text.split()[1].replace(".", "").replace(",", ".")),
+                                      tag_nome[0].text)
+                        self.strumenti.append(s)
+                    except:
+                        print("Error in parse link")
+        '''
 
     def get_instruments(self):
         for i in self.strumenti:
@@ -84,6 +121,7 @@ class SiteInterface:
 if __name__ == '__main__':
     si = SiteInterface()
     si.add_page(
-        'https://www.mercatinomusicale.com/ann/search.asp?kw=occasione&rp=2&ct=&ch=&mc=&gp=&st=&p1=&p2=&rg=&pv=&vt=&pc=&sg=&pn=&ob=prezzodesc')
+       'https://www.mercatinomusicale.com/ann/search.asp?kw=occasione&rp=2&ct=&ch=&mc=&gp=&st=&p1=&p2=&rg=&pv=&vt=&pc=&sg=&pn=&ob=prezzodesc')
+    si.add_page('https://www.mercatinomusicale.com/ann/search.asp?kw=occasione&rp=2&ct=&ch=&mc=&gp=&st=&p1=&p2=&rg=&pv=&vt=&pc=&sg=&pn=&ob=data')
     si.retrieve_elements()
     si.update_db()

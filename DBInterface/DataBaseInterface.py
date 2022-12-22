@@ -38,7 +38,6 @@ class DBInterface:
 
 
 if __name__ == '__main__':
-    #get_new_lines()
     interface = DBInterface()
-    interface.get_today_lines()
-    #interface.get_new_lines()
+    #interface.get_today_lines()
+    interface.get_new_lines()
